@@ -1,13 +1,14 @@
 import express, { Application, Request, Response } from 'express';
 import mongoose from 'mongoose';
 import config from './config/config';
-// import blogRoutes from './routes/blogRoutes';
+
+// import routes
+import restaurantRoutes from './routes/restaurant.routes';
 // import userRoutes from './routes/userRoutes';
 
 const app: Application = express();
 
 // middlewares
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -30,17 +31,14 @@ app.use(express.urlencoded({ extended: true }));
 			});
 }
 
-// routes
+// initiate routes
 // home
 app.get('/', (request: Request, response: Response) => {
-	response.redirect('/api/blogs');
+	response.redirect('/api/restaurant');
 });
 
-// blogs
-// app.use('/api/blogs', blogRoutes);
-
-// users
-// app.use('/api/users', userRoutes);
+app.use('/', restaurantRoutes);
+// app.use('/', userRoutes);
 
 // 404
 app.use((request: Request, response: Response) => {
