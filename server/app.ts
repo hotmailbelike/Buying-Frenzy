@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 				console.log('Connected to MongoDB database');
 				app.listen(config.server.port, () =>
 					console.log(
-						`Server running at http://${config.server.hostname}:${config.server.port}...`
+						`Server running at http://${config.server.hostname}:${config.server.port}`
 					)
 				);
 			})

@@ -33,11 +33,11 @@
 	},
 	"dependencies": {
 		"bcryptjs": "^2.4.3",
-		"date-fns": "^2.28.0",
 		"dayjs": "^1.10.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"jsonwebtoken": "^8.5.1",
+		"moment": "^2.29.1",
 		"mongoose": "^5.12.12",
 		"morgan": "^1.10.0",
 		"node": "^16.1.0",
