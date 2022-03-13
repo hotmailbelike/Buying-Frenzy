@@ -41,14 +41,6 @@ const searchByTime = async (req: Request, res: Response) => {
 		day = timeStringSplitBySpaceArray[0];
 		timeIn12Hour = `${timeStringSplitBySpaceArray[1]}${timeStringSplitBySpaceArray[2]}`;
 		let timeInMinutes: number = convertTimeToMinutes(timeIn12Hour);
-		console.log(
-			'🚀 -> file: restaurant.controller.ts -> line 44 -> searchByTime -> timeInMinutes',
-			timeInMinutes
-		);
-		console.log(
-			'🚀 -> file: restaurant.controller.ts -> line 42 -> searchByTime -> day',
-			day
-		);
 
 		const restaurants = await Restaurant.find({
 			timeSchedule: {
@@ -65,4 +57,42 @@ const searchByTime = async (req: Request, res: Response) => {
 	}
 };
 
-export { populateDatabase, searchByTime };
+const searchByRestaurantOrDishName = async (req: Request, res: Response) => {
+	const page: number = (req.query as any).page ? parseInt((req.query as any).page) : 0;
+	const limit: number = (req.query as any).limit ? parseInt((req.query as any).limit) : 0;
+	try {
+		let { restaurantOrDishName } = req.body;
+
+		let regexSearchTerm: RegExp = new RegExp(restaurantOrDishName, 'i');
+
+		let restaurantQuery = Restaurant.find({
+			$or: [{ restaurantName: { $regex: regexSearchTerm } }],
+		});
+
+		let dishQuery = Restaurant.aggregate([
+			{ $unwind: '$menu' },
+			{ $match: { 'menu.dishName': { $regex: regexSearchTerm } } },
+			{
+				$project: {
+					_id: 0,
+					restaurantName: 1,
+					dishName: '$menu.dishName',
+					price: '$menu.price',
+				},
+			},
+		]);
+
+		const [restaurants, dishes] = await Promise.all([restaurantQuery, dishQuery]);
+
+		if (restaurants.length > dishes.length) {
+			res.json({ restaurants, dishes });
+		} else if (dishes.length > restaurants.length) {
+			res.json({ dishes, restaurants });
+		}
+	} catch (error) {
+		console.error('searchByRestaurantNameOrDish -> error', error);
+		return res.status(500).json({ error });
+	}
+};
+
+export { populateDatabase, searchByTime, searchByRestaurantOrDishName };
