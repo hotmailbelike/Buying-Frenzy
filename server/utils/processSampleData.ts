@@ -61,4 +61,4 @@ const breakDownStringDate = (restaurantData: any[]) => {
 	return restaurantData;
 };
 
-export { breakDownStringDate };
+export { breakDownStringDate, convertTimeToMinutes };
