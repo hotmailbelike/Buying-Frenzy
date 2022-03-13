@@ -9,15 +9,25 @@ const menuSubSchema: Schema = new Schema({
 	},
 });
 
+const timeScheduleSubSchema: Schema = new Schema({
+	day: {
+		type: String,
+	},
+	start: {
+		type: Number, // 24 hour clock time in minutes
+	},
+	end: {
+		type: Number, // 24 hour clock time in minutes
+	},
+});
+
 const restaurantSchema: Schema = new Schema(
 	{
 		cashBalance: {
 			type: Number,
 		},
 		menu: [menuSubSchema],
-		openingHours: {
-			type: String,
-		},
+		timeSchedule: [timeScheduleSubSchema],
 		restaurantName: {
 			type: String,
 		},
