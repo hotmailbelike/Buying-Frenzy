@@ -102,4 +102,78 @@ const searchByRestaurantOrDishName = async (req: Request, res: Response) => {
 	}
 };
 
-export { populateDatabase, searchByTime, searchByRestaurantOrDishName };
+const searchByMenuPriceRange = async (req: Request, res: Response) => {
+	let {
+		restaurantLimit, // limit number of restaurants to fetch
+		moreOrLess, // eiter "more" or "less" to indicate more than dishLimit or less than dishLimit
+		dishLimit, //  how many dishes to limit per restaurant
+		priceUpperLimit, // dish price max limit
+		priceLowerLimit, // dish price min limit
+	} = req.body;
+
+	try {
+		let restaurants = await Restaurant.aggregate([
+			{
+				$unwind: {
+					path: '$menu',
+				},
+			},
+			{
+				$match: {
+					'menu.price': {
+						$gte: priceLowerLimit,
+						$lte: priceUpperLimit,
+					},
+				},
+			},
+			{
+				$group: {
+					_id: '$restaurantName',
+					menuMatched: {
+						$addToSet: '$$ROOT',
+					},
+				},
+			},
+			{
+				$project: {
+					_id: 0,
+					restaurantName: '$_id',
+					menu: '$menuMatched.menu',
+					menuSize: {
+						$size: '$menuMatched',
+					},
+				},
+			},
+			{
+				$match: {
+					menuSize:
+						moreOrLess === 'more'
+							? {
+									$gte: dishLimit,
+							  }
+							: { $lte: dishLimit },
+				},
+			},
+			{
+				$sort: {
+					menuSize: -1,
+				},
+			},
+			{
+				$limit: restaurantLimit,
+			},
+		]);
+
+		res.json(restaurants);
+	} catch (error) {
+		console.error('searchByMenuPriceRange -> error', error);
+		res.status(500).json({ error });
+	}
+};
+
+export {
+	populateDatabase,
+	searchByTime,
+	searchByRestaurantOrDishName,
+	searchByMenuPriceRange,
+};
