@@ -40,7 +40,7 @@ const searchByTime = async (req: Request, res: Response) => {
 	const page: number = (req.query as any).page ? parseInt((req.query as any).page) : 0;
 	const limit: number = (req.query as any).limit ? parseInt((req.query as any).limit) : 0;
 
-	let { timeString } = req.body;
+	let { timeString }: { timeString: string } = req.body;
 
 	try {
 		let day: string = '';
@@ -67,9 +67,9 @@ const searchByTime = async (req: Request, res: Response) => {
 };
 
 const searchByRestaurantOrDishName = async (req: Request, res: Response) => {
-	try {
-		let { restaurantOrDishName } = req.body;
+	let { restaurantOrDishName }: { restaurantOrDishName: string } = req.body;
 
+	try {
 		let regexSearchTerm: RegExp = new RegExp(restaurantOrDishName, 'i');
 
 		let restaurantQuery = Restaurant.find({
@@ -97,7 +97,7 @@ const searchByRestaurantOrDishName = async (req: Request, res: Response) => {
 			res.json({ dishes, restaurants });
 		}
 	} catch (error) {
-		console.error('searchByRestaurantNameOrDish -> error', error);
+		console.error('searchByRestaurantOrDishName -> error', error);
 		return res.status(500).json({ error });
 	}
 };
@@ -109,6 +109,12 @@ const searchByMenuPriceRange = async (req: Request, res: Response) => {
 		dishLimit, //  how many dishes to limit per restaurant
 		priceUpperLimit, // dish price max limit
 		priceLowerLimit, // dish price min limit
+	}: {
+		restaurantLimit: number;
+		moreOrLess: string;
+		dishLimit: number;
+		priceUpperLimit: number;
+		priceLowerLimit: number;
 	} = req.body;
 
 	try {

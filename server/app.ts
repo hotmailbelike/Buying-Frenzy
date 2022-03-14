@@ -4,7 +4,7 @@ import config from './config/config';
 
 // import routes
 import restaurantRoutes from './routes/restaurant.routes';
-// import userRoutes from './routes/userRoutes';
+import userRoutes from './routes/user.routes';
 
 const app: Application = express();
 
@@ -38,7 +38,7 @@ app.get('/', (request: Request, response: Response) => {
 });
 
 app.use('/', restaurantRoutes);
-// app.use('/', userRoutes);
+app.use('/', userRoutes);
 
 // 404
 app.use((request: Request, response: Response) => {
