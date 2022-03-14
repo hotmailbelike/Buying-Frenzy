@@ -18,10 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 		mongoose
 			.connect(config.mongodb.url, config.mongodb.options)
 			.then((result) => {
-				console.log(
-					'🚀 -> file: app.ts -> line 18 -> config.mongodb.url',
-					config.mongodb.url
-				);
 				console.log('Connected to MongoDB database');
 				app.listen(config.server.port, () =>
 					console.log(
