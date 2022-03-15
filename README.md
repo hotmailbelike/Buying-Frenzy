@@ -57,8 +57,8 @@ Main Features:
 
 The app is deployed and is hosted in `https://omar-buying-frenzy.herokuapp.com`.
 You can make api calls from this this link to test it out. 
-If you want to test it right away, scroll down to <a href="#usage">Usage</a> section
-Or, If you want to run it in your own local machine, scroll down to <a href="#prerequisites">Prerequisites</a> section.
+If you want to test it right away, scroll down to <a href="#usage">Usage</a> section.<br/>
+Or, if you want to run it in your own local machine, scroll down to <a href="#prerequisites">Prerequisites</a> section.
 
 ### Prerequisites
 * MongoDB atlas account (use mine if you don't have one)
